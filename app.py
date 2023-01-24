@@ -6,7 +6,19 @@ app=Flask(__name__)
 
 @app.route("/")
 def welcome():
-    return render_template('index.html')
+    
+    url = 'https://newsapi.org/v2/everything?q=Latest+News&sortBy=popularity&apiKey=e21c28ebd4ff471e970182ebc9da81fd'
+    latest_news = requests.get(url).json()
+    a = latest_news['articles']
+    desc =[]
+    title =[]
+    img =[]
+    for i in range(len(a)):
+          f = a[i]
+          title.append(f['title'])
+          desc.append(f['description'])
+          img.append(f['urlToImage'])
+    return render_template('index.html',mylist = zip(title, desc, img))
 
 @app.route("/news",methods=['POST'])
 def news():
